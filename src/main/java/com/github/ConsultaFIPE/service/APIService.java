@@ -10,8 +10,9 @@ import java.util.Scanner;
 public class APIService {
 
     private String vehicleType;
-    private String coreAdress = "https://parallelum.com.br/fipe/api/v1/";
+    private final String coreURL = "https://parallelum.com.br/fipe/api/v1/";
     private String carModel;
+    private String modelYear;
     Scanner sc = new Scanner(System.in);
 
     public void setVehicleType () {
@@ -31,11 +32,22 @@ public class APIService {
         } else {
             System.out.println("Opção inválida, por favor tente novamente.");
         }
-        this.coreAdress = this.coreAdress + this.vehicleType + "/marcas";
     }
 
-    public String getCoreAdress() {
-        return coreAdress;
+    public String getBrandURL() {
+        return this.coreURL + this.vehicleType + "/marcas";
+    }
+
+    public String getModelsURL() {
+        return this.coreURL + this.vehicleType + "/marcas/" + this.carModel + "/modelos";
+    }
+
+    public String getYearURL() {
+        return getModelsURL() + "/" + this.modelYear + "/anos";
+    }
+
+    public void setModelYear(String modelYear) {
+        this.modelYear = modelYear;
     }
 
     public String APIConsulting (String webAddress) throws IOException, InterruptedException {
@@ -54,6 +66,6 @@ public class APIService {
         System.out.println("Por favor, digite o código referente à marca do veículo: ");
         String modelo = sc.nextLine();
         this.carModel = modelo;
-        this.coreAdress = this.coreAdress + "/" + this.carModel + "/modelos";
+        //this.coreAddress = this.coreAddress + "/" + this.carModel + "/modelos";
     }
 }
