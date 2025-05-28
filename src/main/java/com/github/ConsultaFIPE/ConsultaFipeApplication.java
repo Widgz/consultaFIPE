@@ -3,6 +3,7 @@ package com.github.ConsultaFIPE;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.ConsultaFIPE.service.APIService;
 import com.github.ConsultaFIPE.service.CarProperty;
+import com.github.ConsultaFIPE.service.CarValue;
 import com.github.ConsultaFIPE.service.ModelsList;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -50,10 +51,17 @@ public class ConsultaFipeApplication implements CommandLineRunner {
 
 		apiService.setModelYear(modelYear);
 
-		String valueJson = apiService.APIConsulting(apiService.getYearURL());
+		String modelYearJson = apiService.APIConsulting(apiService.getYearURL());
 
-		List<CarProperty> values = Arrays.asList(mapper.readValue(valueJson, CarProperty[].class));
+		List<CarProperty> values = Arrays.asList(mapper.readValue(modelYearJson, CarProperty[].class));
+		List<CarValue> finalValues = new ArrayList<>();
 
-		values.forEach(System.out::println);
+		for (int i = 0; i < values.size(); i++) {
+			String finalPriceURL = apiService.getYearURL() + "/" + values.get(i).codigo();
+			String finalValueJson = apiService.APIConsulting(finalPriceURL);
+			finalValues.add(mapper.readValue(finalValueJson, CarValue.class));
+		}
+
+		finalValues.forEach(System.out::println);
 	}
 }
